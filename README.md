@@ -1,0 +1,2 @@
+# minc
+Minimal C
