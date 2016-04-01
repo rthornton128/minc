@@ -17,12 +17,13 @@ func (p *Parser) Parse() {
 	// start the scanner
 	go p.Scan()
 
-	// begin parsing, starting with the top-most non-terminal, program
+	// begin parsing, starting with the top-most non-terminal: program
 	p.next()
 	p.program()
-	// a program must end at the end of the file
+
+	// a program must conclude with EOF
 	p.expect(scan.EOF)
-	close(p.Errors)
+	p.Errors <- nil
 }
 
 // send an error
@@ -34,10 +35,10 @@ func (p *Parser) error(msg string, args ...interface{}) {
 // an error on failure. in either instance, the scanner is advanced to
 // the next token
 func (p *Parser) expect(t scan.Token) scanner.Position {
+	defer p.next()
 	if p.item.Tok != t {
 		p.error("expected %s got %s", t, p.item.Tok)
 	}
-	p.next()
 	return p.item.Pos
 }
 

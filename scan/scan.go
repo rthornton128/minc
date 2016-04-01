@@ -33,7 +33,7 @@ type Scanner struct {
 
 // emit sends a new item down the Items channel
 func (s *Scanner) emit(t Token) {
-	s.Items <- &Item{Lit: s.Scanner.TokenText(), Pos: s.Position, Tok: t}
+	s.Items <- &Item{Lit: s.TokenText(), Pos: s.Position, Tok: t}
 }
 
 // errHandler reports the position and message of errors encountered by the
@@ -79,5 +79,5 @@ func (s *Scanner) Scan() {
 		}
 	}
 	close(s.Items)
-	close(s.Errors)
+	s.Errors <- nil
 }
