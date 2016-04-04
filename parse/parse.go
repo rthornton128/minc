@@ -13,17 +13,19 @@ type Parser struct {
 	item *scan.Item
 }
 
-func (p *Parser) Parse() {
+func (p *Parser) Parse() *ast.Program {
 	// start the scanner
 	go p.Scan()
 
 	// begin parsing, starting with the top-most non-terminal: program
 	p.next()
-	p.program()
+	prog := p.program()
 
 	// a program must conclude with EOF
 	p.expect(scan.EOF)
 	p.Errors <- nil
+
+	return prog
 }
 
 // send an error
@@ -71,8 +73,9 @@ func (p *Parser) identifier() *ast.Identifier {
 	// for an identifier, I want to record both its literal value and its
 	// location. Again, the location is very important for error reporting
 	// when it comes to verifying it against a symbol table
+	name := p.item.Lit
 	return &ast.Identifier{
-		Lit: p.item.Lit,
+		Lit: name,
 		Pos: p.expect(scan.Ident),
 	}
 }
