@@ -58,10 +58,11 @@ func (p *Parser) error(msg string, args ...interface{}) {
 // an error on failure. in either instance, the scanner is advanced to
 // the next token
 func (p *Parser) expect(t scan.Token) scanner.Position {
-	defer p.next()
 	if p.item.Tok != t {
 		p.error("expected %s got %s", t, p.item.Tok)
+		return p.item.Pos
 	}
+	defer p.next()
 	return p.item.Pos
 }
 
