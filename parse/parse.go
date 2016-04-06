@@ -10,20 +10,19 @@ import (
 	"github.com/rthornton128/minc/scan"
 )
 
+// Parser steps through the lexical token pairs returned by the Scanner.
+// It verifies that the tokens receive match the syntactical specifical for
+// the MinC language. It is important to remember that it verifies only the
+// correctness of the order of elements, not the semantic correctness.
+// Semantics are things like type correctness.
 type Parser struct {
 	scan.Scanner
-	item       *scan.Item
-	Error      func(p *Parser, msg string)
-	ErrorCount int
+	item *scan.Item
 }
 
 // Init sets Error to write to standard error then initializes the
-// scanner
+// scanner. By default, Error will write to stderr
 func (p *Parser) Init(fileName string, src io.Reader) {
-	// by default, Error will write to stderr
-	p.Error = func(p *Parser, msg string) {
-		fmt.Fprintln(os.Stderr, msg)
-	}
 	p.Scanner.Init(fileName, src)
 }
 
@@ -45,8 +44,14 @@ func (p *Parser) Parse() *ast.Program {
 
 // generate an error
 func (p *Parser) error(msg string, args ...interface{}) {
-	p.Error(p, fmt.Sprintf(msg, args...))
+	msg = fmt.Sprintf(msg, args...)
 	p.ErrorCount++
+
+	if p.Error != nil {
+		p.Error(&p.Scanner.Scanner, msg)
+		return
+	}
+	fmt.Fprintln(os.Stderr, msg)
 }
 
 // expect returns the position of the lexem on success or generates
