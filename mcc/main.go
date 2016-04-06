@@ -71,14 +71,14 @@ func execAssembler(asm, flags, name string) {
 	if flags == "" {
 		flags = fmt.Sprintf("-o %s.o %s.s", name, name)
 	}
-	execProg(asm, flags)
-	os.Remove(name + ".s")
+	execProg(asm, flags, name+".s")
 }
 
-func execProg(cmd, flags string) {
+func execProg(cmd, flags, rmFile string) {
 	c := exec.Command(cmd, strings.Split(flags, " ")...)
 	if msg, err := c.CombinedOutput(); err != nil {
 		fmt.Fprintln(os.Stderr, string(msg))
 		fatal(err)
 	}
+	os.Remove(rmFile)
 }

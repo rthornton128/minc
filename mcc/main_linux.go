@@ -1,14 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"os"
-)
+import "fmt"
 
 func execLinker(lnk, flags, name string) {
 	if flags == "" {
-		flags = fmt.Sprintf("-o %s -e main %s.o", name, name)
+		flags = fmt.Sprintf("-o %[1]s -e main %[1]s.o", name)
 	}
-	execProg(lnk, flags)
-	os.Remove(name + ".o")
+	execProg(lnk, flags, name+".o")
 }
