@@ -49,14 +49,9 @@ func main() {
 
 	var p parse.Parser
 	p.Init(flag.Arg(0), f)
-	go func() {
-		for {
-			err := <-p.Errors
-			if err != nil {
-				fatal(err)
-			}
-		}
-	}()
+	p.Error = func(p *parse.Parser, msg string) {
+		fmt.Fprintf(os.Stderr, msg)
+	}
 
 	name := filepath.Base(flag.Arg(0))
 	name = name[:len(name)-len(filepath.Ext(name))]

@@ -2,6 +2,8 @@ package parse
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"text/scanner"
 
 	"github.com/rthornton128/minc/ast"
@@ -10,9 +12,23 @@ import (
 
 type Parser struct {
 	scan.Scanner
-	item *scan.Item
+	item       *scan.Item
+	Error      func(p *Parser, msg string)
+	ErrorCount int
 }
 
+// Init sets Error to write to standard error then initializes the
+// scanner
+func (p *Parser) Init(fileName string, src io.Reader) {
+	// by default, Error will write to stderr
+	p.Error = func(p *Parser, msg string) {
+		fmt.Fprintln(os.Stderr, msg)
+	}
+	p.Scanner.Init(fileName, src)
+}
+
+// Parse begins by starting the scanner in a separate goroutine. It
+// generates an abstract syntax tree and returns a pointer to it
 func (p *Parser) Parse() *ast.Program {
 	// start the scanner
 	go p.Scan()
@@ -23,14 +39,14 @@ func (p *Parser) Parse() *ast.Program {
 
 	// a program must conclude with EOF
 	p.expect(scan.EOF)
-	p.Errors <- nil
 
 	return prog
 }
 
-// send an error
+// generate an error
 func (p *Parser) error(msg string, args ...interface{}) {
-	p.Errors <- fmt.Errorf(msg, args...)
+	p.Error(p, fmt.Sprintf(msg, args...))
+	p.ErrorCount++
 }
 
 // expect returns the position of the lexem on success or generates

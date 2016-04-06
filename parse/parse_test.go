@@ -3,6 +3,7 @@ package parse_test
 import (
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/rthornton128/minc/parse"
 )
@@ -13,9 +14,9 @@ func TestParse(t *testing.T) {
 	var p parse.Parser
 	p.Init("parse.mc", src)
 	go p.Parse()
+	time.Sleep(1500)
 
-	err := <-p.Errors
-	if err != nil {
-		t.Error(err)
+	if p.ErrorCount != 0 {
+		t.Error("expected no errors, received", p.ErrorCount)
 	}
 }

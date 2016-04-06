@@ -11,6 +11,7 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/rthornton128/minc/scan"
 )
@@ -75,10 +76,11 @@ func TestReadError(t *testing.T) {
 	// that the NUL character not be present within a stream.
 	var s scan.Scanner
 	s.Init("read_error.mc", bytes.NewReader([]byte{0}))
-	go s.Scan()
 
-	err := <-s.Errors
-	if err == nil {
-		t.Error("expected error got nil")
+	go s.Scan()
+	time.Sleep(1500) // wait for error to be propogated, may need adjustment
+
+	if s.ErrorCount != 1 {
+		t.Error("expected error got none")
 	}
 }

@@ -11,7 +11,6 @@
 package scan
 
 import (
-	"fmt"
 	"io"
 	"text/scanner"
 )
@@ -27,8 +26,7 @@ type Item struct {
 // Errors channel
 type Scanner struct {
 	scanner.Scanner
-	Items  chan *Item
-	Errors chan error
+	Items chan *Item
 }
 
 // emit sends a new item down the Items channel
@@ -36,21 +34,13 @@ func (s *Scanner) emit(t Token) {
 	s.Items <- &Item{Lit: s.TokenText(), Pos: s.Position, Tok: t}
 }
 
-// errHandler reports the position and message of errors encountered by the
-// scanner
-func (s *Scanner) errHandler(_ *scanner.Scanner, msg string) {
-	s.Errors <- fmt.Errorf("%s %s", s.Position, msg)
-}
-
 // Init initializes the embedded scanner and initializes the Items and
 // Errors channels. Init must be called prior to using any other functions
 // else undefined behaviour or panics may occur
 func (s *Scanner) Init(fileName string, r io.Reader) {
 	s.Items = make(chan *Item)
-	s.Errors = make(chan error)
 
 	s.Scanner.Init(r)
-	s.Scanner.Error = s.errHandler
 	s.Scanner.Filename = fileName
 }
 
@@ -79,5 +69,4 @@ func (s *Scanner) Scan() {
 		}
 	}
 	close(s.Items)
-	s.Errors <- nil
 }

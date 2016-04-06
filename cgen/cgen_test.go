@@ -15,11 +15,7 @@ func TestPreamble(t *testing.T) {
 
 	var p parse.Parser
 	p.Init("cgen.mc", src)
-	go func() {
-		for {
-			<-p.Errors
-		}
-	}()
+
 	prog := p.Parse()
 	buf := new(bytes.Buffer)
 	gen := cgen.CGen{buf}
