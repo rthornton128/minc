@@ -11,6 +11,14 @@ import (
 	"github.com/rthornton128/minc/ast"
 )
 
+// Success and failure of a process is architecture dependant. However, since
+// no targets that have non-defacto exit codes are currently targetted by
+// MinC, it resides here
+const (
+	ExitSuccess = 0 // Indicates the process exits with success
+	ExitFailure = 1 // Indicates the process exits with failure
+)
+
 // GasIntelDirect signals whether or not the intel directive should be
 // emitted by the code generator. It defaults to true
 var IsGas = true
