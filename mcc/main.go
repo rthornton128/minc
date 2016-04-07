@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"text/scanner"
 
 	"github.com/rthornton128/minc/cgen"
 	"github.com/rthornton128/minc/parse"
@@ -28,6 +29,7 @@ func main() {
 	flag.StringVar(&lflags, "lflags", lflags, "linker flags")
 	flag.StringVar(&assembler, "asm", assembler, "exernal assembler to execute")
 	flag.StringVar(&aflags, "aflags", aflags, "assembler flags")
+	flag.BoolVar(&cgen.IsGas, "gnuas", cgen.IsGas, "emit intel_syntax directive")
 	flag.Parse()
 
 	// verify only one argument was supplied and test whether the extension is
@@ -49,7 +51,7 @@ func main() {
 
 	var p parse.Parser
 	p.Init(flag.Arg(0), f)
-	p.Error = func(p *parse.Parser, msg string) {
+	p.Error = func(_ *scanner.Scanner, msg string) {
 		fmt.Fprintf(os.Stderr, msg)
 	}
 

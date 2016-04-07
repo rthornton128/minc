@@ -11,6 +11,10 @@ import (
 	"github.com/rthornton128/minc/ast"
 )
 
+// GasIntelDirect signals whether or not the intel directive should be
+// emitted by the code generator. It defaults to true
+var IsGas = true
+
 // CGen wraps an io.Writer to output the generated assembly to. If
 // Writer is nil, it defaults to stdout
 type CGen struct{ io.Writer }
@@ -19,7 +23,7 @@ func (c *CGen) emit(msg string, args ...interface{}) {
 	fmt.Fprintf(c.Writer, msg, args...)
 }
 
-func (c *CGen) emitPreamble() {
+func (c *CGen) emitIntelDirective() {
 	c.emit(".intel_syntax noprefix\n\n")
 }
 
@@ -35,7 +39,9 @@ func (c *CGen) Generate(p *ast.Program) {
 	if c.Writer == nil {
 		c.Writer = os.Stdout
 	}
-	c.emitPreamble()
+	if IsGas {
+		c.emitIntelDirective()
+	}
 	c.emit(".global %s\n\n", p.Function.Name.Lit)
 	c.emit(".section .text\n")
 	c.function(p.Function)
