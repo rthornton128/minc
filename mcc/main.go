@@ -1,3 +1,7 @@
+// Mcc, or Minimal C Compiler, is the beast that runs the show. In fact,
+// it's much more than a compiler. It is more of a tool that calls other
+// programs too, like an assembler and linker, to create an executable
+// binary
 package main
 
 import (

@@ -5,9 +5,10 @@
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
 
-// Scan wraps itself around text/scanner to provide a more compiler friendly
-// interface. The intent is to provide a smaller snapshot of the scanning
-// process to make the learning process more approachable at an earlly stage
+// Package scan wraps itself around text/scanner to provide a more compiler
+// friendly interface. The intent is to provide a smaller snapshot of the
+// scanning process to make the learning process more approachable at an
+// early stage
 package scan
 
 import (
@@ -15,10 +16,12 @@ import (
 	"text/scanner"
 )
 
+// Item contains the literal-token pairs of each lexical element lexed by
+// the scanner
 type Item struct {
-	Lit string
-	Pos scanner.Position
-	Tok Token
+	Lit string           // the literal, textual value of the lexem
+	Pos scanner.Position // start position of the literal
+	Tok Token            // the token representing the lexem
 }
 
 // Scanner embeds text/scanner.Scanner and provides facilities to send
