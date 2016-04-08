@@ -1,3 +1,5 @@
+// Package parse implements the MinC parser. It is a straight forward
+// recursive LR parser
 package parse
 
 import (
