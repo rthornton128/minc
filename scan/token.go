@@ -14,6 +14,7 @@ type Token int
 const (
 	Invalid Token = iota // Invalid/Unknown character
 	EOF                  // End-of-File
+	Func                 // Function
 	Ident                // Identifier
 	LBrace               // "{"
 	RBrace               // "}"
@@ -24,6 +25,7 @@ const (
 var tokens = map[Token]string{
 	Invalid: "invalid",
 	EOF:     "eof",
+	Func:    "func",
 	Ident:   "identifier",
 	LBrace:  "{",
 	RBrace:  "}",
@@ -33,3 +35,10 @@ var tokens = map[Token]string{
 
 // String returns a textual represented of a valid token
 func (t Token) String() string { return tokens[t] }
+
+func Tokenize(s string) Token {
+	if s == "func" {
+		return Func
+	}
+	return Ident
+}

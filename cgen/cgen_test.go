@@ -13,7 +13,7 @@ import (
 )
 
 func TestGenerateSanity(t *testing.T) {
-	src := strings.NewReader("void main() {}")
+	src := strings.NewReader("func main() {}")
 
 	var p parse.Parser
 	p.Init("cgen.mc", src)
@@ -36,7 +36,7 @@ func TestGenerateSanity(t *testing.T) {
 }
 
 func TestGenerateAssemble(t *testing.T) {
-	src := strings.NewReader("void main() {}")
+	src := strings.NewReader("func main() {}")
 
 	var p parse.Parser
 	p.Init("cgen.mc", src)

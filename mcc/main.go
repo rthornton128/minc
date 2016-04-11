@@ -56,7 +56,7 @@ func main() {
 	var p parse.Parser
 	p.Init(flag.Arg(0), f)
 	p.Error = func(_ *scanner.Scanner, msg string) {
-		fmt.Fprintf(os.Stderr, msg)
+		fmt.Fprintln(os.Stderr, msg)
 	}
 
 	name := filepath.Base(flag.Arg(0))

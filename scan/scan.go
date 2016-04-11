@@ -56,7 +56,7 @@ func (s *Scanner) Scan() {
 		r = s.Scanner.Scan()
 		switch r {
 		case scanner.Ident:
-			s.emit(Ident)
+			s.emit(Tokenize(s.TokenText()))
 		case '{':
 			s.emit(LBrace)
 		case '}':

@@ -19,13 +19,13 @@ import (
 func TestScan(t *testing.T) {
 	// Do a sanity check to ensure that all the tokens we expect in a
 	// minimal C program will be reported accurately
-	src := strings.NewReader("void main() {}")
+	src := strings.NewReader("func main() {}")
 	expect := []struct {
 		Lit string
 		Off int
 		Tok scan.Token
 	}{
-		{"void", 0, scan.Ident},
+		{"func", 0, scan.Func},
 		{"main", 5, scan.Ident},
 		{"(", 9, scan.LParen},
 		{")", 10, scan.RParen},

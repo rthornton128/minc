@@ -10,7 +10,7 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	src := strings.NewReader("void main() {}")
+	src := strings.NewReader("func main() {}")
 
 	var p parse.Parser
 	p.Init("parse.mc", src)
@@ -37,7 +37,7 @@ func TestBadParse(t *testing.T) {
 }
 
 func TestBadParseWithHander(t *testing.T) {
-	src := strings.NewReader("void main) {}")
+	src := strings.NewReader("func main) {}")
 
 	var p parse.Parser
 	p.Init("badparse.mc", src)

@@ -8,7 +8,7 @@ type (
 	// specification describes, it consists of a return type, symobolic name,
 	// parameter list and a statement block
 	Function struct {
-		Type      *Identifier
+		Func      scanner.Position
 		Name      *Identifier
 		ParamList *ParamList
 		StmtBlock *StmtBlock

@@ -86,7 +86,7 @@ func (p *Parser) function() *ast.Function {
 	// this is handled later in the semantic analysis stage (type checking
 	// of void) and linking (main being undeclared)
 	return &ast.Function{
-		Type:      p.identifier(),
+		Func:      p.expect(scan.Func),
 		Name:      p.identifier(),
 		ParamList: p.paramList(),
 		StmtBlock: p.stmtBlock(),
