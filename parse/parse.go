@@ -47,6 +47,7 @@ func (p *Parser) Parse() *ast.Program {
 // generate an error
 func (p *Parser) error(msg string, args ...interface{}) {
 	msg = fmt.Sprintf(msg, args...)
+	msg = fmt.Sprintf("%s: %s", p.item.Pos, msg)
 	p.ErrorCount++
 
 	if p.Error != nil {
